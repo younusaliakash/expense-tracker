@@ -1,11 +1,31 @@
+<script setup>
+import { defineProps, defineEmits } from "vue";
+const emit = defineEmits(["handleDelete"]);
+
+defineProps({
+  transactions: {
+    type: Array,
+    required: true,
+  },
+});
+
+const deleteTransaction = (id) => {
+  emit("handleDelete", id);
+};
+</script>
+
 <template>
-    <h3>History</h3>
-      <ul id="list" class="list">
-        <li class="minus">
-          Cash <span>-$400</span><button class="delete-btn">x</button>
-        </li>
-        <li class="plus">
-          Cash <span>-$400</span><button class="delete-btn">x</button>
-        </li>
-      </ul>
+  <h3>History</h3>
+  <ul id="list" class="list">
+    <li
+      v-for="(transaction, idx) in transactions"
+      :key="transaction.id"
+      :class="transaction.amount < 0 ? 'minus' : 'plus'"
+    >
+      {{ transaction.text }} <span>${{ transaction.amount }}</span
+      ><button class="delete-btn" @click="deleteTransaction(transaction.id)">
+        x
+      </button>
+    </li>
+  </ul>
 </template>
